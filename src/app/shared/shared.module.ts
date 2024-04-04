@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PoModule } from '@po-ui/ng-components';
+import { PoTemplatesModule } from '@po-ui/ng-templates';
 
 
 
@@ -9,6 +10,9 @@ import { PoModule } from '@po-ui/ng-components';
   imports: [
     CommonModule
   ],
-  exports: [PoModule]
+  exports: [
+    PoModule,
+    PoTemplatesModule
+  ]
 })
 export class SharedModule { }

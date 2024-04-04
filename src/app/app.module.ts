@@ -5,9 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { PoTemplatesModule } from '@po-ui/ng-templates';
 import { HomeComponent } from './features/home/home.component';
 import { SharedModule } from './shared/shared.module';
+import { ToolbarModule } from './core/toolbar/toolbar.module';
 
 @NgModule({
   declarations: [
@@ -18,9 +18,9 @@ import { SharedModule } from './shared/shared.module';
     BrowserModule,
     AppRoutingModule,
     SharedModule,
+    ToolbarModule,
     HttpClientModule,
-    RouterModule.forRoot([]),
-    PoTemplatesModule
+    RouterModule.forRoot([])
   ],
   providers: [],
   bootstrap: [AppComponent]
