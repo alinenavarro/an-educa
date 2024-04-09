@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 import { HomeComponent } from './features/home/home.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent }
+  { path: '', component: HomeComponent },
+  { path: 'students', loadChildren: () => import('./features/students/students.module').then(m => m.StudentsModule)}
 ];
 
 @NgModule({
