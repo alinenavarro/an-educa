@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PoBreadcrumb, PoPageAction, PoTableColumn } from '@po-ui/ng-components';
+import { PoBreadcrumb, PoNotificationService, PoPageAction, PoTableColumn } from '@po-ui/ng-components';
 import { Students } from './shared/interfaces/students.model';
+import { StudentsService } from './shared/services/students.service';
 
 @Component({
   selector: 'app-students',
@@ -29,7 +30,11 @@ export class StudentsComponent implements OnInit {
     remainingRecords: 0
   }
 
-  constructor() { }
+  
+  constructor(
+    private studentsService: StudentsService,
+    private poNotificationService: PoNotificationService
+  ) { }
 
   ngOnInit(): void {
     this.setTableColumns();
@@ -50,16 +55,11 @@ export class StudentsComponent implements OnInit {
   }
 
   getStudents(): void {
-    this.students.items = [
-      {
-        id: '000003',
-        name: 'Aline Navarro',
-        cpf: '6666666666',
-        email: 'email@email.com',
-        grade: 'MBA',
-        phone: '666666666'
-      }
-    ]
+    
+    this.studentsService.get().subscribe({
+        next: (students: Students) => this.students.items = students.items,
+        error: (error: any) => this.poNotificationService.error("Falha no retorno dos dados de alunos")
+    });
   }
 
 
