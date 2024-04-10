@@ -1,7 +1,15 @@
 <po-page-default
-  >
+  p-title="Alunos"
+  [p-actions]="pageActions" 
+  [p-breadcrumb]="breadcrumb" 
+ >
 
-  <p>students works!</p>
+ <po-table 
+ [p-columns]="tableColumns"
+ [p-items]="students.items"
+ 
+ > 
+</po-table>
 
 </po-page-default>
 
