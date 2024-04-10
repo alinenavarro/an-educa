@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -14,8 +14,12 @@ export class StudentsService {
     private httpClient: HttpClient
   ) { }
 
-  get(): Observable<Students> {
-    return this.httpClient.get<Students>(environment.studentsAPI);
+  get(page: number, pageSize: number): Observable<Students> {
+    const httpParams = new HttpParams()
+    .append('page', page)
+    .append('pageSize',pageSize)
+    
+    return this.httpClient.get<Students>(environment.studentsAPI, { params: httpParams});
   }    
 
 }

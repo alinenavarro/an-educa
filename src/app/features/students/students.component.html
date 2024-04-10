@@ -8,6 +8,9 @@
  [p-columns]="tableColumns"
  [p-items]="students.items"
  [p-loading]="isLoading"
+ [p-show-more-disabled]="!hasNextPage"
+ (p-show-more)="showMoreStudents()"
+ [p-loading-show-more]="isLoading"
  
  > 
 </po-table>

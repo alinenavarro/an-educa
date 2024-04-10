@@ -31,6 +31,9 @@ export class StudentsComponent implements OnInit {
   }
 
   isLoading = false;
+  hasNextPage = false;
+  page = 1;
+  pageSize = 10;
 
   constructor(
     private studentsService: StudentsService,
@@ -39,7 +42,7 @@ export class StudentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.setTableColumns();
-    this.getStudents();
+    this.getStudents(this.page,this.pageSize);
 
   }
 
@@ -55,13 +58,29 @@ export class StudentsComponent implements OnInit {
     ]
   }
 
-  getStudents(): void {
+  getStudents(page: number, pageSize: number): void {
     
     this.isLoading = true;
-    this.studentsService.get().subscribe({
-        next: (students: Students) => { this.students.items = students.items; this.isLoading = false;},
+    this.studentsService.get(page, pageSize).subscribe({
+        next: (students: Students) => this.onGetSucess(students) ,
         error: (error: any) => { this.poNotificationService.error("Falha no retorno dos dados de alunos"); this.isLoading = false;}
     });
+  }
+
+  onGetSucess(students: Students): void {
+    if (this.students.items.length === 0) {
+      this.students.items = students.items;
+    } else {
+      this.students.items = this.students.items.concat(students.items);
+    }
+
+    this.isLoading = false;
+    this.hasNextPage = students.hasNext;
+  }
+
+  showMoreStudents() {
+    this.page ++;
+    this.getStudents(this.page, this.pageSize);
   }
 
 
