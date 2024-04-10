@@ -30,7 +30,8 @@ export class StudentsComponent implements OnInit {
     remainingRecords: 0
   }
 
-  
+  isLoading = false;
+
   constructor(
     private studentsService: StudentsService,
     private poNotificationService: PoNotificationService
@@ -56,9 +57,10 @@ export class StudentsComponent implements OnInit {
 
   getStudents(): void {
     
+    this.isLoading = true;
     this.studentsService.get().subscribe({
-        next: (students: Students) => this.students.items = students.items,
-        error: (error: any) => this.poNotificationService.error("Falha no retorno dos dados de alunos")
+        next: (students: Students) => { this.students.items = students.items; this.isLoading = false;},
+        error: (error: any) => { this.poNotificationService.error("Falha no retorno dos dados de alunos"); this.isLoading = false;}
     });
   }
 
