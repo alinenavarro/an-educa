@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { PoBreadcrumb, PoNotificationService, PoPageAction, PoTableColumn } from '@po-ui/ng-components';
 import { Students } from './shared/interfaces/students.model';
 import { StudentsService } from './shared/services/students.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-students',
@@ -12,7 +13,7 @@ import { StudentsService } from './shared/services/students.service';
 export class StudentsComponent implements OnInit {
 
   pageActions: Array<PoPageAction> = [
-    { label: 'Incluir' }
+    { label: 'Incluir', action: this.goToStudentsForm.bind(this) }
   ];
 
   breadcrumb: PoBreadcrumb = {
@@ -37,13 +38,18 @@ export class StudentsComponent implements OnInit {
 
   constructor(
     private studentsService: StudentsService,
-    private poNotificationService: PoNotificationService
+    private poNotificationService: PoNotificationService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.setTableColumns();
     this.getStudents(this.page,this.pageSize);
 
+  }
+
+  goToStudentsForm(): void {
+    this.router.navigate(['students/new']);
   }
 
   setTableColumns(): void {
