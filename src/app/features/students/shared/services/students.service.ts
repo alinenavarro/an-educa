@@ -14,10 +14,13 @@ export class StudentsService {
     private httpClient: HttpClient
   ) { }
 
-  get(page: number, pageSize: number): Observable<Students> {
+  get(page: number, pageSize: number, fields?: string, filter?: string, sort?: string): Observable<Students> {
     const httpParams = new HttpParams()
     .append('page', page)
     .append('pageSize',pageSize)
+    .append('FIELDS', fields ? fields : '')
+    .append('FILTER', filter ? filter : '')
+    .append('SORT', sort ? sort : 'id')
     
     return this.httpClient.get<Students>(environment.studentsAPI, { params: httpParams});
   }    
