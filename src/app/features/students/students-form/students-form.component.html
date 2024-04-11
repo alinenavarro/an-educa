@@ -5,4 +5,105 @@
     (p-save)="ngOnInit()"
     (p-save-new)="ngOnInit()"
     >
+
+    <form [formGroup]="studentForm">
+        <po-container class="po-row po-xl-12 po-lg-12 po-md-12 po-sm-12">
+
+            <div class="row">
+
+                <po-divider class="po-md-12"
+                p-label="Informações Gerais"> 
+                </po-divider>
+
+                <po-input
+                    class="po-md-2"
+                    p-label="ID"
+                    p-disabled="true"
+                    p-icon="po-icon-user-add"
+                    formControlName="id"
+                >
+                </po-input>
+
+                <po-input
+                class="po-md-6"
+                p-label="Nome"
+                p-placeholder="Informe o nome do aluno"
+                p-clean="true"
+                p-icon="po-icon-user"
+                p-required="false"
+                formControlName="name"
+                >
+                </po-input>
+
+                <po-input
+                class="po-md-4"
+                p-label="CPF"
+                p-placeholder="Informe o CPF do aluno"
+                p-clean="true"
+                p-icon="po-icon-credit-payment"
+                p-required="false"
+                formControlName="cpf"
+                >
+                </po-input>
+
+
+            </div>
+
+     
+
+            <div class="row">
+
+                <po-divider class="po-md-12 po-mt-2"
+                p-label="Informações de Contato"> 
+                </po-divider>
+
+                <po-input
+                class="po-md-6"
+                p-label="E-mail"
+                p-placeholder="Informe o e-mail do aluno"
+                p-clean="true"
+                p-icon="po-icon-mail"
+                p-required="false"
+                formControlName="email"
+                >
+                </po-input>
+
+                <po-input
+                class="po-md-4"
+                p-label="Telefone"
+                p-placeholder="Informe o telefone do aluno"
+                p-clean="true"
+                p-icon="po-icon-telephone"
+                p-required="false"
+                formControlName="phone"
+                >
+                </po-input>
+            </div>
+
+
+            <div class="row">
+                
+                <po-divider class="po-md-12 po-mt-2"
+                p-label="Informações do Curso"> 
+                </po-divider>
+
+                <po-input
+                class="po-md-6"
+                p-label="Curso"
+                p-placeholder="Informe o Curso do aluno"
+                p-clean="true"
+                p-icon="po-icon-book"
+                p-required="false"
+                formControlName="grade"
+                >
+                </po-input>
+            </div>
+
+
+
+
+        </po-container>
+
+    </form>
+
 </po-page-edit>
