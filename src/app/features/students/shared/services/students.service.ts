@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { Students } from '../interfaces/students.model';
 import { environment } from 'src/environments/environment';
+import { Student } from '../interfaces/student.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,4 +26,8 @@ export class StudentsService {
     return this.httpClient.get<Students>(environment.studentsAPI, { params: httpParams});
   }    
 
+  post(body: Student): Observable<Student> {
+    return this.httpClient.post<Student>(environment.studentsAPI, body);
+  }
+  
 }
