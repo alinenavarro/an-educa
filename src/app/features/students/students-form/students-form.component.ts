@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 
 import { PoBreadcrumb } from '@po-ui/ng-components';
 import { StudentForm } from '../shared/interfaces/student-form.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-students-form',
@@ -28,12 +29,16 @@ export class StudentsFormComponent implements OnInit {
     ]
   };
   
-  constructor(){}
+  constructor(
+    private router: Router
+  ){}
 
   ngOnInit(): void {
-    // this.studentForm.valueChanges.subscribe({
-    //   next: (res: any) => console.log(res)
-    // })
+ 
+  }
+
+  cancel(): void {
+    this.router.navigate(['students']);
   }
 
 
