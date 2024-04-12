@@ -8,6 +8,7 @@ import { RouterModule } from '@angular/router';
 import { HomeComponent } from './features/home/home.component';
 import { SharedModule } from './shared/shared.module';
 import { ToolbarModule } from './core/toolbar/toolbar.module';
+import { ProtheusLibCoreModule } from '@totvs/protheus-lib-core';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ToolbarModule } from './core/toolbar/toolbar.module';
     SharedModule,
     ToolbarModule,
     HttpClientModule,
-    RouterModule.forRoot([])
+    RouterModule.forRoot([]),
+    ProtheusLibCoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]
