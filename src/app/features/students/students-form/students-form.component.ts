@@ -73,25 +73,46 @@ export class StudentsFormComponent implements OnInit {
   saveForm(saveAndNew: boolean ): void {
     this.isLoading = true;
     this.disableButton = true;
+    this.operation === 'post' ? this.postStudent(saveAndNew) : this.putStudent(saveAndNew);
+  }
+
+  postStudent(saveAndNew: boolean): void {
     this.studentsService.post(this.studentForm.value).subscribe({
       next: response => this.onSaveSuccess(response, saveAndNew),
       error: error => this.onSaveError(error)
     });
- 
+  }
+
+  putStudent(saveAndNew: boolean): void {
+    this.studentsService.put(this.studentForm.value).subscribe({
+      next: response => this.onSaveSuccess(response, saveAndNew),
+      error: error => this.onSaveError(error)
+    });
   }
 
   onSaveSuccess(response: Student, saveAndNew:boolean ): void {
+    const { id } = response; 
+    const operationText = this.operation === 'post' ? 'incluído' : 'alterado';
+    const notificationText = `Registro ${operationText} com Sucesso! ID ${id}`;
+
     this.isLoading = false;
     this.disableButton = false;
-    this.poNotificationService.success(`Registro incluído com Sucesso! ID ${response.id}`);
-    saveAndNew ? this.studentForm.reset() : this.router.navigate(['students']);
-
+    this.poNotificationService.success(notificationText);
+    
+    if (saveAndNew) {
+      this.studentForm.reset();
+    } else {
+      this.router.navigate(['students']);
+    }
   }
 
   onSaveError(error: any): void {
+    const operationText = this.operation === 'post' ? 'incluir' : 'alterar';
+    const notificationText = `Erro ao tentar ${operationText} registro.`;
+
     this.isLoading = false;
     this.disableButton = false;
-    this.poNotificationService.error('Erro ao tentar incluir registro.');
+    this.poNotificationService.error(notificationText);
 
   }
 
