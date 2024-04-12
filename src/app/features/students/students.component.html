@@ -11,6 +11,9 @@
  [p-show-more-disabled]="!hasNextPage"
  (p-show-more)="showMoreStudents()"
  [p-loading-show-more]="isLoading"
+ p-container="border"
+ [p-height]="heightTable"
+ [p-infinite-scroll]="hasNextPage"
  
  > 
 </po-table>

@@ -35,6 +35,7 @@ export class StudentsComponent implements OnInit {
   hasNextPage = false;
   page = 1;
   pageSize = 10;
+  heightTable = 385;
 
   constructor(
     private studentsService: StudentsService,
