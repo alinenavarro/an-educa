@@ -24,7 +24,11 @@ export class StudentsService {
     .append('SORT', sort ? sort : 'id')
     
     return this.httpClient.get<Students>(environment.studentsAPI, { params: httpParams});
-  }    
+  } 
+  
+  getById(id: string):Observable<Student> {
+    return this.httpClient.get<Student>(`${environment.studentsAPI}/${id}`);
+  }
 
   post(body: Student): Observable<Student> {
     return this.httpClient.post<Student>(environment.studentsAPI, body);
