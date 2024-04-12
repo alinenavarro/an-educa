@@ -6,5 +6,5 @@ export interface StudentForm {
     cpf: FormControl<string>;
     grade: FormControl<string>;
     email: FormControl<string>;
-    phone?: FormControl<string>;
+    phone: FormControl<string>;
 }

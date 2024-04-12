@@ -4,5 +4,5 @@ export interface Student {
     cpf: string;
     grade: string;
     email: string;
-    phone?: string;
+    phone: string;
 }

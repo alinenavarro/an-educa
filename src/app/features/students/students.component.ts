@@ -68,12 +68,12 @@ export class StudentsComponent implements OnInit {
     
     this.isLoading = true;
     this.studentsService.get(page, pageSize).subscribe({
-        next: (students: Students) => this.onGetSucess(students) ,
+        next: (students: Students) => this.successGet(students) ,
         error: (error: any) => { this.poNotificationService.error("Falha no retorno dos dados de alunos"); this.isLoading = false;}
     });
   }
 
-  onGetSucess(students: Students): void {
+  successGet(students: Students): void {
     if (this.students.items.length === 0) {
       this.students.items = students.items;
     } else {
