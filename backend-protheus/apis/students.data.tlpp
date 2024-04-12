@@ -1,0 +1,225 @@
+#include "tlpp-core.th"
+#include "FWMVCDEF.CH"
+
+namespace students
+
+
+/*/{Protheus.doc} StudentsData
+Classe de Manipulação dos dados de alunos
+
+@type class
+@author aline.navarro
+@since 04/2024
+@version P12
+/*/
+
+Class StudentsData From FWAdapterBaseV2
+
+    Public Data oHashFields	as Object
+
+    Public method new() as Object
+    Public method get()
+    Public method handleStudents() as Logical
+    Public method setHashFields()
+
+EndClass
+
+
+/*/{Protheus.doc} StudentsData:new()
+Instancia a classe StudentsData
+
+@type method
+@author aline.navarro
+@since 04/2024
+@version P12
+/*/
+
+Method new(cVerb as Character) as Object Class StudentsData
+
+    _Super:new(cVerb, .T.)
+
+Return Self
+
+
+/*/{Protheus.doc} StudentsData::setHashFields
+Define os campos utilizados nas operações de Incluir e Alterar
+
+@type method
+@author aline.navarro
+@since 04/2024
+@version P12
+/*/
+
+METHOD setHashFields() CLASS StudentsData
+
+	::oHashFields := tHashMap():New()
+
+	::oHashFields:Set("id"          , "ZZ1_CODIGO")
+	::oHashFields:Set("name"        , "ZZ1_NOME")
+	::oHashFields:Set("cpf"         , "ZZ1_CPF")
+    ::oHashFields:Set("grade"       , "ZZ1_CURSO")
+	::oHashFields:Set("email"       , "ZZ1_EMAIL")
+    ::oHashFields:Set("phone"       , "ZZ1_FONE")
+
+Return Nil
+
+
+/*/{Protheus.doc} StudentsData:get()
+Retorna os dados de alunos
+
+@type method
+@author aline.navarro
+@since 04/2024
+@version P12
+/*/
+
+Method get(nPage as Numeric, nPageSize as Numeric, cFilter as Character,;
+    cFields as Character, cSort as Character, cStudentId as Character) Class StudentsData
+    Local aArea as Array
+    Local cWhere as Character
+    Local aFilter as Array
+
+    aFilter := {}
+
+    If Empty(cStudentId)
+        cWhere := "ZZ1_FILIAL = '" + FwxFilial("ZZ1") + "' AND D_E_L_E_T_ = ''"
+    Else
+        cWhere := "ZZ1_CODIGO = '" + cStudentId + "' AND ZZ1_FILIAL = '" + FwxFilial("ZZ1") + "' AND D_E_L_E_T_ = ''"
+    EndIf
+
+    aArea   := FwGetArea()
+
+    AddMapFields(self)
+
+    If !Empty(cFilter)
+        aAdd(aFilter, {"FILTER", cFilter})
+        ::SetUrlFilter(aFilter)
+    EndIf
+
+    If !Empty(cFields)
+        ::SetFields(cFields)
+    EndIf
+
+    If !Empty(cSort)
+        ::SetOrderQuery(cSort)
+    EndIf
+
+    ::SetPage(nPage)
+    ::SetPageSize(nPageSize)
+    ::SetQuery(utils.u_getQuery('ZZ1'))
+    ::SetWhere(cWhere)
+    ::SetOrder("ZZ1_FILIAL, ZZ1_CODIGO")
+
+    If ::Execute()
+        ::FillGetResponse()
+    EndIf
+
+    RestArea( aArea )
+	aSize( aArea, 0 )
+
+Return Nil
+
+
+/*/{Protheus.doc} StudentsData:handleStudents()
+Inclui, altera ou exclui um aluno
+
+@type method
+@author aline.navarro
+@since 04/2024
+@version P12
+/*/
+
+Method handleStudents(nOperation as Numeric, jBody as Json, cStudentId as Character) as Logical Class StudentsData
+    
+    Local oModel	as Object
+	Local oModelZZ1	as Object
+    Local lRet as Logical
+    Local aData as Array
+    
+    lRet := .T.
+    ::setHashFields()
+
+    If nOperation <> 5
+        aData := utils.u_buildData(jBody, self)
+	Endif
+
+    If nOperation <> 3
+        If !utils.u_searchRecord(cStudentId, 'ZZ1')
+            lRet := .F.
+            Return SetResponse(lRet)
+        EndIf
+    EndIf
+
+    oModel := FWLoadModel("ANEDUC01")
+    oModelZZ1 := oModel:GetModel("ZZ1MASTER")
+    utils.u_setOperationModel(oModel, nOperation)
+
+    oModel:Activate()
+    If oModel:IsActive()
+        If oModel:GetOperation() <> 5
+            lRet := utils.u_setValue( aData, oModelZZ1, 'ZZ1' )
+		Endif
+    Else
+        lRet := .F.        
+    EndIf
+
+    If !lRet .Or. !( oModel:VldData() .And. oModel:CommitData() )
+		lRet := .F.
+        SetRestFault( 400, utils.u_getError(oModel:GetErrorMessage()) )
+	Endif
+
+	oModel:DeActivate()
+	FreeObj(oModelZZ1)
+	FreeObj(oModel)
+
+Return SetResponse(lRet)
+
+
+/*/{Protheus.doc} AddMapFields
+Determina quais propriedades x campos do protheus serão apresentados
+
+@type function
+@author aline.navarro
+@since 04/2024
+@version P12
+/*/
+
+Static Function AddMapFields(oSelf as Object)
+    
+    oSelf:AddMapFields("id", "ZZ1_CODIGO", .T., .T., {"ZZ1_CODIGO", 'C', TamSX3( 'ZZ1_CODIGO' )[1], 0})
+    oSelf:AddMapFields("name", "ZZ1_NOME", .T., .F., {"ZZ1_NOME"  , 'C', TamSX3( 'ZZ1_NOME' )[1]  , 0})
+    oSelf:AddMapFields("cpf", "ZZ1_CPF", .T., .F., {"ZZ1_CPF"   , 'C', TamSX3( 'ZZ1_CPF' )[1]   , 0})
+    oSelf:AddMapFields("grade", "ZZ1_CURSO", .T., .F., {"ZZ1_CURSO" , 'C', TamSX3( 'ZZ1_CURSO' )[1] , 0})
+    oSelf:AddMapFields("email", "ZZ1_EMAIL", .T., .F., {"ZZ1_EMAIL" , 'C', TamSX3( 'ZZ1_EMAIL' )[1] , 0})
+    oSelf:AddMapFields("phone", "ZZ1_FONE", .T., .F., {"ZZ1_FONE"  , 'C', TamSX3( 'ZZ1_FONE' )[1]  , 0})
+
+Return Nil
+
+
+/*/{Protheus.doc} SetResponse
+Monta objeto de response
+
+@type function
+@author aline.navarro
+@since 04/2024
+@version P12
+/*/
+
+Static Function SetResponse(lRet as Logical) as Json
+   
+    Local jResponse as Json
+
+    If lRet
+
+        jResponse := JsonObject():New()
+
+        jResponse['id'] := AllTrim(ZZ1->ZZ1_CODIGO)
+        jResponse['name'] := EncodeUTF8(AllTrim(ZZ1->ZZ1_NOME))
+        jResponse['cpf'] := AllTrim(ZZ1->ZZ1_CPF)
+        jResponse['grade'] := EncodeUTF8(AllTrim(ZZ1->ZZ1_CURSO))
+        jResponse['email'] := AllTrim(ZZ1->ZZ1_EMAIL)
+        jResponse['phone'] := AllTrim(ZZ1->ZZ1_FONE)
+
+    EndIf
+
+Return jResponse

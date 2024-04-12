@@ -1,0 +1,140 @@
+#include "tlpp-core.th"
+
+namespace students
+
+/*/{Protheus.doc} StudentsService
+Classe de serviços de dados de alunos
+
+@type class
+@author aline.navarro
+@since 04/2024
+@version P12
+/*/
+
+Class StudentsService
+
+    Public Data jResponse as Json
+
+    Public method new() as Object
+    Public method get() as Json
+    Public method post() as Json
+    Public method put() as Json
+    Public method delete() as Json
+
+EndClass
+
+
+/*/{Protheus.doc} StudentsServices:new()
+Instancia a classe StudentsService
+
+@type method
+@author aline.navarro
+@since 04/2024
+@version P12
+/*/
+
+Method new() as Object Class StudentsService
+
+    ::jResponse := JsonObject():New()
+
+Return Self
+
+
+/*/{Protheus.doc} StudentsService:get()
+Retorna os dados de alunos
+
+@type method
+@author aline.navarro
+@since 04/2024
+@version P12
+/*/
+
+Method get(nPage as Numeric, nPageSize as Numeric, cFilter as Character,;
+    cFields as Character, cSort as Character, cStudentId as Character) as Json Class StudentsService
+    
+    Local oData as Object
+
+    oData := StudentsData():new("GET")
+    oData:get(nPage, nPageSize, cFilter, cFields, cSort, cStudentId)
+
+    If oData:lOk
+        ::jResponse := oData:gtJsonObjResponse()
+        If !Empty(cStudentId) .And. Len(::jResponse['items']) > 0
+            ::jResponse := ::jResponse['items'][1]
+        EndIf
+    Else
+        ::jResponse := SetRestFault(oData:GetCode(), oData:GetMessage())
+    EndIf
+
+Return ::jResponse
+
+
+/*/{Protheus.doc} StudentsService:post()
+Inclui um aluno
+
+@type method
+@author aline.navarro
+@since 04/2024
+@version P12
+/*/
+
+Method post(nOperation as Numeric, jBody as Json) as Json Class StudentsService
+
+    Local oData as Object
+
+    oData := StudentsData():new("POST")
+    ::jResponse := oData:handleStudents(nOperation, jBody)
+
+    If !oData:lOk
+        ::jResponse := SetRestFault(oData:GetCode(), oData:GetMessage())
+    EndIf
+
+Return ::jResponse
+
+
+/*/{Protheus.doc} StudentsService:put()
+Altera um aluno
+
+@type method
+@author aline.navarro
+@since 04/2024
+@version P12
+/*/
+
+Method put(nOperation as Numeric, jBody as Json, cStudentId as Character) as Json Class StudentsService
+    
+    Local oData as Object
+
+    oData := StudentsData():new("PUT")
+    ::jResponse := oData:handleStudents(nOperation, jBody, cStudentId)
+
+    If !oData:lOk
+        ::jResponse := SetRestFault(oData:GetCode(), oData:GetMessage())
+    EndIf
+
+Return ::jResponse
+
+
+/*/{Protheus.doc} StudentsService:delete()
+Exclui um aluno
+
+@type method
+@author aline.navarro
+@since 04/2024
+@version P12
+/*/
+
+Method delete(nOperation as Numeric, cStudentId as Character) as Json Class StudentsService
+    
+    Local oData as Object
+
+    oData := StudentsData():new("DELETE")
+    oData:handleStudents(nOperation,, cStudentId)
+
+    If oData:lOk
+        ::jResponse := oData:GetJsonObject()
+    Else
+        ::jResponse := SetRestFault(oData:GetCode(), oData:GetMessage())
+    EndIf
+    
+Return ::jResponse

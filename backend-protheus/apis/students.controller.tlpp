@@ -1,0 +1,189 @@
+#include 'tlpp-core.th'
+
+namespace students
+
+/*/{Protheus.doc} StudentsController
+Classe de Controle da API de Alunos, com opções de Incluir, Alterar e Excluir
+
+@type class
+@author aline.navarro
+@since 04/2024
+@version P12
+/*/
+
+Class StudentsController
+
+	Data jResponse  as Json
+	Data oService   as Object
+
+	Public Method new() as Object
+
+	@Get("/api/v1/students")
+	Public Method get() as Logical
+
+	@Get("/api/v1/students/:id")
+	Public Method getById() as Logical
+
+	@Post("/api/v1/students")
+	Public Method post() as Logical
+
+	@Put("/api/v1/students/:id")
+	Public Method put() as Logical
+
+	@Delete("/api/v1/students/:id")
+	Public Method delete() as Logical
+
+EndClass
+
+
+/*/{Protheus.doc} StudentsController:new() as Object
+Instancia a classe StudentsController
+
+@type method
+@author aline.navarro
+@since 04/2024
+@version P12
+/*/
+
+Method new() as Object Class StudentsController
+
+	::oService  := StudentsService():new()
+	::jResponse := JsonObject():new()
+
+Return self
+
+
+/*/{Protheus.doc} StudentsController:get() as Logical
+Retorna todos os alunos
+
+@type method
+@author aline.navarro
+@since 04/2024
+@version P12
+@return	logical, Verdadeiro
+/*/
+
+Method get() as Logical Class StudentsController
+
+	Local cFields as Character
+	Local cSort as Character
+	Local cFilter as Character
+	Local nPage as Numeric
+	Local nPageSize as Numeric
+
+	nPage := utils.u_getQueryParam('page')
+	nPageSize := utils.u_getQueryParam('pageSize')
+	cFields := utils.u_getQueryParam('FIELDS')
+	cFilter := utils.u_getQueryParam('FILTER')
+	cSort := utils.u_getQueryParam('SORT')
+
+    oRest:setKeyHeaderResponse('Content-Type','application/json')
+	oRest:setResponse(::oService:get(Val(nPage), Val(nPageSize), cFilter, cFields, cSort))
+
+Return .T.
+
+
+/*/{Protheus.doc} StudentsController:getById() as Logical
+Retorna um aluno pelo seu código/id
+
+@type method
+@author aline.navarro
+@since 04/2024
+@version P12
+@return	logical, Verdadeiro
+/*/
+
+Method getById() as Logical Class StudentsController
+
+	Local cId as Character
+	Local cFields as Character
+
+	cFields := utils.u_getQueryParam('FIELDS')
+
+	oRest:setKeyHeaderResponse('Content-Type','application/json')
+	cId := oRest:getPathParamsRequest()['id']
+	oRest:setResponse(::oService:get(1, 10, /* cFilter */, cFields, /* cSort */, cId))
+
+Return .T.
+
+
+/*/{Protheus.doc} StudentsController:post() as Logical
+Inclui um aluno
+
+@type method
+@author aline.navarro
+@since 04/2024
+@version P12
+@return logical, Verdadeiro
+/*/
+
+Method post() as Logical Class StudentsController
+
+	Local cBody as Character
+	Local jBody as Json
+
+	oRest:setKeyHeaderResponse('Content-Type','application/json; charset=utf-8')
+	
+	cBody := oRest:getBodyRequest()
+	jBody := JsonObject():New()
+
+	If jBody:FromJson(cBody) == Nil
+		oRest:setResponse(::oService:post(3, jBody))
+	Else
+		setRestFault(400, "Json inválido")
+	EndIf
+	
+Return .T.
+
+
+/*/{Protheus.doc} StudentsController:put() as Logical
+Altera um aluno
+
+@type method
+@author aline.navarro
+@since 04/2024
+@version P12
+@return	logical, Verdadeiro
+/*/
+
+Method put() as Logical Class StudentsController
+
+	Local cBody as Character
+	Local jBody as Json
+	Local cId as Character
+
+	oRest:setKeyHeaderResponse('Content-Type','application/json; charset=utf-8')
+
+	cId := oRest:getPathParamsRequest()['id']
+	cBody := oRest:getBodyRequest()
+	jBody := JsonObject():New()
+
+	If jBody:FromJson(cBody) == Nil
+		oRest:setResponse(::oService:put(4, jBody, cId))
+	Else
+		setRestFault(400, "Json inválido")
+	EndIf
+
+Return .T.
+
+
+/*/{Protheus.doc} StudentsController:delete() as Logical
+Exclui um aluno
+
+@type method
+@author aline.navarro
+@since 04/2024
+@version P12
+@return	logical, Verdadeiro
+/*/
+
+Method delete() as Logical Class StudentsController
+
+	Local cId as Character
+
+	oRest:setKeyHeaderResponse('Content-Type','application/json; charset=utf-8')
+
+	cId := oRest:getPathParamsRequest()['id']
+	oRest:setResponse(::oService:delete(5, cId))
+    
+Return .T.
