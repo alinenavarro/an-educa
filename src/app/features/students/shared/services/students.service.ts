@@ -37,4 +37,8 @@ export class StudentsService {
   put(body: Student): Observable<Student> {
     return this.httpClient.put<Student>(`${environment.studentsAPI}/${body.id}`, body);
   }
+
+  delete(id: string):Observable<any> {
+    return this.httpClient.delete<any>(`${environment.studentsAPI}/${id}`);
+  }
 }
