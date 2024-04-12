@@ -34,4 +34,7 @@ export class StudentsService {
     return this.httpClient.post<Student>(environment.studentsAPI, body);
   }
   
+  put(body: Student): Observable<Student> {
+    return this.httpClient.put<Student>(`${environment.studentsAPI}/${body.id}`, body);
+  }
 }
