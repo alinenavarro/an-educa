@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import { PoBreadcrumb, PoNotificationService, PoPageEditLiterals } from '@po-ui/ng-components';
+import { PoBreadcrumb, PoDialogService, PoNotificationService, PoPageEditLiterals } from '@po-ui/ng-components';
 import { StudentForm } from '../shared/interfaces/student-form.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentsService } from '../shared/services/students.service';
@@ -44,7 +44,8 @@ export class StudentsFormComponent implements OnInit {
     private router: Router,
     private studentsService: StudentsService,
     private poNotificationService: PoNotificationService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private poDialogService: PoDialogService
   ){ }
 
   ngOnInit(): void {
@@ -139,6 +140,43 @@ export class StudentsFormComponent implements OnInit {
   errorGetById(error: any): void {
     this.isLoading = false;
     this.poNotificationService.error('Falha ao retornar registro.');
+  }
+
+  saveOrDelete(): void {
+    if (this.operation == 'post') {
+      this.saveForm(true);
+    } else {
+      this.confirmDelete();
+    }
+  }
+
+  confirmDelete() :void {
+    this.poDialogService.confirm( {
+      title: 'Excluir Aluno',
+      message: 'Confirma a exclusão do aluno?',
+      confirm: this.delete.bind(this)
+    })
+  }
+
+  delete(): void {
+    this.isLoading = true;
+    this.disableButton = true;
+    this.studentsService.delete(this.studentId).subscribe({
+      next: () => this.successDelete(),
+      error: () => this.errorDelete()
+    });
+  }
+
+  successDelete(): void {
+    this.isLoading = false;
+    this.router.navigate(['students']);
+    this.poNotificationService.success('Registro excluído com Sucesso!');
+  }
+
+  errorDelete(): void {
+    this.isLoading = false;
+    this.disableButton = false;
+    this.poNotificationService.error('Erro ao tentar excluir o registro.');
   }
 
 }
