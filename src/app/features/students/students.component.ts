@@ -54,7 +54,7 @@ export class StudentsComponent implements OnInit {
 
   setTableColumns(): void {
     this.tableColumns = [
-      { property: 'id', label: 'ID' },
+      { property: 'id', label: 'ID', type: 'link', action: (row: string) => this.openFormEdit(row) },
       { property: 'name', label: 'Nome' },
       { property: 'cpf', label: 'CPF' },
       { property: 'grade', label: 'Curso' },
@@ -87,6 +87,10 @@ export class StudentsComponent implements OnInit {
   showMoreStudents() {
     this.page ++;
     this.getStudents(this.page, this.pageSize);
+  }
+
+  openFormEdit(id: string): void {
+    this.router.navigate(['students/edit', id]);
   }
 
 

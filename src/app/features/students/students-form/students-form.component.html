@@ -1,12 +1,12 @@
 <po-page-edit
-    p-title="Novo Registro"
+    [p-title]="titleForm"
     [p-breadcrumb]="breadcrumb"
     (p-cancel)="cancel()"
     (p-save)="saveForm(false)"
     (p-save-new)="saveForm(true)"
     [p-disable-submit]="disableButton"
-    >
-   
+    [p-literals]="customLiteralsButtons"
+    >   
         <po-loading-overlay [hidden]="!isLoading">
         </po-loading-overlay>
 
@@ -57,7 +57,7 @@
 
                 <div class="row">
 
-                    <po-divider class="po-md-12 po-mt-2"
+                    <po-divider class="po-md-12 po-mt-1"
                     p-label="Informações de Contato"> 
                     </po-divider>
 
@@ -87,7 +87,7 @@
 
                 <div class="row">
                     
-                    <po-divider class="po-md-12 po-mt-2"
+                    <po-divider class="po-md-12 po-mt-1"
                     p-label="Informações do Curso"> 
                     </po-divider>
 

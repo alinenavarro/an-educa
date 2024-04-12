@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import { PoBreadcrumb, PoNotificationService } from '@po-ui/ng-components';
+import { PoBreadcrumb, PoNotificationService, PoPageEditLiterals } from '@po-ui/ng-components';
 import { StudentForm } from '../shared/interfaces/student-form.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { StudentsService } from '../shared/services/students.service';
 import { Student } from '../shared/interfaces/student.model';
 
@@ -33,15 +33,34 @@ export class StudentsFormComponent implements OnInit {
   
   isLoading: boolean = false;
   disableButton: boolean = false;
+  operation: string = 'post';
+  titleForm: string = 'Novo Registro';
+  customLiteralsButtons: PoPageEditLiterals = {
+    saveNew: 'Salvar e Novo'
+  };
 
   constructor(
     private router: Router,
     private studentsService: StudentsService,
-    private poNotificationService: PoNotificationService
+    private poNotificationService: PoNotificationService,
+    private activatedRoute: ActivatedRoute
   ){ }
 
   ngOnInit(): void {
- 
+    this.setOperationForm();
+    this.setTitlesForm();
+  }
+
+  setOperationForm(): void {
+    this.operation = this.activatedRoute.snapshot.params['id'] ? 'put' : 'post';
+  }
+
+  setTitlesForm(): void {
+    if(this.operation === 'put') {
+      this.titleForm = 'Editar Registro';
+      this.customLiteralsButtons.saveNew = 'Excluir';
+    } 
+    this.breadcrumb.items[2].label = this.titleForm;
   }
 
   cancel(): void {
@@ -72,8 +91,6 @@ export class StudentsFormComponent implements OnInit {
     this.poNotificationService.error('Erro ao tentar incluir registro.');
 
   }
-
-
 
 
 }
