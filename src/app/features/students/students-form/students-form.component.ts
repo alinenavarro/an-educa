@@ -38,6 +38,7 @@ export class StudentsFormComponent implements OnInit {
   customLiteralsButtons: PoPageEditLiterals = {
     saveNew: 'Salvar e Novo'
   };
+  studentId: string = '';
 
   constructor(
     private router: Router,
@@ -49,10 +50,12 @@ export class StudentsFormComponent implements OnInit {
   ngOnInit(): void {
     this.setOperationForm();
     this.setTitlesForm();
+    this.operation == 'put' ? this.getStudentById() : '';
   }
 
   setOperationForm(): void {
-    this.operation = this.activatedRoute.snapshot.params['id'] ? 'put' : 'post';
+    this.studentId = this.activatedRoute.snapshot.params['id']
+    this.operation = this.studentId ? 'put' : 'post';
   }
 
   setTitlesForm(): void {
@@ -92,5 +95,29 @@ export class StudentsFormComponent implements OnInit {
 
   }
 
+  getStudentById(): void {
+    this.isLoading = true;
+    this.studentsService.getById(this.studentId).subscribe({
+      next: (student: Student) => this.successGetById(student),
+      error: (error: any) => this.errorGetById(error)
+    }); 
+  }
+
+  successGetById(student: Student): void {
+    this.isLoading = false;
+    this.studentForm = new FormGroup<StudentForm>({
+      id: new FormControl(student.id, { nonNullable: true }),
+      name: new FormControl(student.name, { nonNullable: true }),
+      cpf: new FormControl(student.cpf, { nonNullable: true }),
+      email: new FormControl(student.email, { nonNullable: true }),
+      phone: new FormControl(student.phone, { nonNullable: true }),
+      grade: new FormControl(student.grade, { nonNullable: true })
+    });
+  }
+
+  errorGetById(error: any): void {
+    this.isLoading = false;
+    this.poNotificationService.error('Falha ao retornar registro.');
+  }
 
 }
