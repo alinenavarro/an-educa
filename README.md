@@ -1,27 +1,37 @@
-# AnEduca
+# AN Educa
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.13.
+Este é um aplicativo desenvolvido usando Angular 16 com a biblioteca PO-UI, que oferece uma interface de usuário responsiva para realizar operações CRUD (Create, Read, Update, Delete) de Alunos. O backend utilizado são APIs Rest do Protheus.
 
-## Development server
+## Pré-requisitos
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Node.js e npm instalados
+- Angular CLI instalado (`npm install -g @angular/cli`)
 
-## Code scaffolding
+## Instalação
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+1. Clone este repositório:
+   ```
+   git clone https://github.com/alinenavarro/an-educa.git
+   ```
 
-## Build
+2. Navegue até o diretório do projeto e instale as dependências do projeto:
+   ```
+   cd an-educa
+   npm install
+   ```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Uso
 
-## Running unit tests
+1. Inicie o servidor de desenvolvimento:
+   ```
+   ng serve
+   ```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+2. Abra o navegador e navegue até [http://localhost:4200/](http://localhost:4200/) para ver o aplicativo em ação.
 
-## Running end-to-end tests
+## Funcionalidades
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- **Create**: Adicione novos alunos.
+- **Read**: Visualize os cadastros dos alunos.
+- **Update**: Edite os cadastros dos alunos.
+- **Delete**: Delete alunos.
