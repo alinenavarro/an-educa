@@ -11,6 +11,8 @@ import { ProAppConfigService } from '@totvs/protheus-lib-core';
 })
 export class AppComponent {
 
+  menuCollapsed: boolean = true;
+
   constructor(
     private router: Router,
     private proAppConfigService: ProAppConfigService
@@ -19,9 +21,9 @@ export class AppComponent {
   }
 
   readonly menus: Array<PoMenuItem> = [
-    { label: 'Home', action: ()=> this.router.navigate(['']) },
-    { label: 'Alunos', action: ()=> this.router.navigate(['students']) },
-    { label: 'Sair', action: this.closeApp.bind(this) }
+    { label: 'Home', shortLabel: 'Home', icon: 'po-icon-home', action: ()=> this.router.navigate(['']) },
+    { label: 'Alunos', shortLabel: 'Alunos', icon: 'po-icon-user', action: ()=> this.router.navigate(['students']) },
+    { label: 'Sair', shortLabel: 'Sair', icon: 'po-icon-exit', action: this.closeApp.bind(this) }
   ];
 
   closeApp(): void {
